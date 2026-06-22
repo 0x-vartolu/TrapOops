@@ -12,6 +12,7 @@ RUN pip install --no-cache-dir opencanary
 RUN mkdir -p /root/.opencanary/
 COPY opencanary.conf /root/.opencanary/opencanary.conf
 
-EXPOSE 21 22 80
+# EXPOSE the new high ports instead of 21, 22, 80
+EXPOSE 8021 8022 8080
 
 CMD ["opencanaryd", "--dev"]
