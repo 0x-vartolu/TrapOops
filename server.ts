@@ -739,6 +739,38 @@ export async function start (readyCallback?: () => void) {
   void collectDurationPromise('customizeEasterEgg', customizeEasterEgg)() // vuln-code-snippet hide-line
 }
 
+// Web-based Honeypot Trap
+app.all('/admin-backend', async (req: any, res: any) => {
+  const attackerData = {
+    ip: req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+    method: req.method,
+    url: req.originalUrl,
+    headers: req.headers,
+    queryParams: req.query,
+    bodyData: req.body,
+    message: "Honeypot Triggered! Suspected Attacker Activity Detected.",
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    // إرسال البيانات فوراً لـ Webhook.site
+    // ملحوظة: تم تعديل الرابط ليطابق المعرف الدقيق الموجود في الصورة الأولى
+    await fetch('https://webhook.site/908f3867-fd94-4d61-b0a1-8f680aec346a', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(attackerData)
+    });
+  } catch (error) {
+    console.error('Honeypot logging failed', error);
+  }
+
+  // خداع المهاجم برسالة خطأ وهمية
+  res.status(403).json({ 
+    status: "error", 
+    message: "Access Denied. Internal Admin Only." 
+  });
+});
+
 export function close (exitCode: number | undefined) {
   if (server) {
     clearInterval(metricsUpdateLoop)
