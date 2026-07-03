@@ -741,6 +741,7 @@ export async function start (readyCallback?: () => void) {
 
 // Web-based Honeypot Trap
 app.all('/admin-backend', async (req: any, res: any) => {
+//  Granular Threat Intelligence Gathering
   const attackerData = {
     ip: req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress,
     method: req.method,
@@ -753,9 +754,8 @@ app.all('/admin-backend', async (req: any, res: any) => {
   };
 
   try {
-    // إرسال البيانات فوراً لـ Webhook.site
-    // ملحوظة: تم تعديل الرابط ليطابق المعرف الدقيق الموجود في الصورة الأولى
-    await fetch('https://webhook.site/908f3867-fd94-4d61-b0a1-8f680aec346a', {
+    // Real-Time Exfiltration to Centralized Logging Dashboard (Webhook)
+    await fetch('https://webhook.site/a1a39de8-b062-4bda-898d-8bff2a77393f', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(attackerData)
@@ -764,7 +764,7 @@ app.all('/admin-backend', async (req: any, res: any) => {
     console.error('Honeypot logging failed', error);
   }
 
-  // خداع المهاجم برسالة خطأ وهمية
+  // Simulated Deception Response to Mislead the Adversary
   res.status(403).json({ 
     status: "error", 
     message: "Access Denied. Internal Admin Only." 
